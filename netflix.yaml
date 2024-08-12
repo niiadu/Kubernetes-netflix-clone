@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: netflix-service
+spec:
+  type: LoadBalancer
+  selector:
+    name: netflix
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netflix-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: netflix
+  template:
+    metadata:
+      labels:
+        name: netflix
+    spec:
+      containers:
+        - name: netflix
+          image: niiadu/netflix-clone
+          ports:
+            - containerPort: 80
